@@ -13,10 +13,18 @@ MULTIVERSO_INC = $(MULTIVERSO_DIR)/include/multiverso
 MULTIVERSO_LIB = $(MULTIVERSO_DIR)/lib
 THIRD_PARTY_LIB = $(MULTIVERSO_DIR)/third_party/lib
 
+ARMADILLO_INC = /vol6/home/kd_yjp/myw/softwares/armadillo/include
+ARMADILLO_LIB = /vol6/home/kd_yjp/myw/softwares/armadillo/lib64
+
 INC_FLAGS = -I$(MULTIVERSO_INC)
+
+INC_FLAGS += -I$(ARMADILLO_INC)
+
 LD_FLAGS  = -L$(MULTIVERSO_LIB) -lmultiverso
 LD_FLAGS += -L$(THIRD_PARTY_LIB) -lzmq -lmpich -lmpl -lpthread
-  	  	
+LD_FLAGS += -L$(ARMADILLO_LIB) -larmadillo
+OPT = -O3
+
 SVRG_HEADERS = $(shell find $(PROJECT)/src -type f -name "*.h")
 SVRG_SRC     = $(shell find $(PROJECT)/src -type f -name "*.cpp")
 SVRG_OBJ = $(SVRG_SRC:.cpp=.o)
