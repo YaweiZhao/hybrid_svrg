@@ -15,7 +15,7 @@
 
 namespace multiverso
 {
-    namespace svrg
+    namespace hybrid_logistic_regression
     {   
         class MemoryManager
         {
@@ -26,12 +26,12 @@ namespace multiverso
             * \param block_number the block quantity needed
             * \param result the vector of the head address of allocated memory
             */
-            void RequestBlocks(int64 block_number, std::vector<real*>& result);
+            void RequestBlocks(int64 block_number, std::vector<double*>& result);
             /*!
             * \brief Delete the blocks memory
             * \param blocks the vector of the head address of allocated memory
             */
-            void ReturnBlocks(std::vector<real*>& blocks);
+            void ReturnBlocks(std::vector<double*>& blocks);
             ~MemoryManager();
 
         private:

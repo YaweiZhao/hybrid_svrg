@@ -4,6 +4,8 @@
 #include "util.h"
 #include "armadillo"
 
+using namespace arma;
+
 namespace multiverso
 {
     namespace hybrid_logistic_regression
@@ -18,7 +20,6 @@ namespace multiverso
 
         public:
             const Option *option_;
-            FILE* file_;
 
             //bool is_dense_matrix(const AzSmat *m) const;
 

@@ -1,5 +1,5 @@
 #include "distributed_svrg.h"
-
+#include "constant.h"
 namespace multiverso
 {
     namespace hybrid_logistic_regression
@@ -23,7 +23,7 @@ namespace multiverso
             multiverso::Barrier* barrier =
             new multiverso::Barrier(option_->thread_cnt);
 
-            MemoryManager* memory_mamanger = new MemoryManager(option_->dim);
+            MemoryManager* memory_mamanger = new MemoryManager(option_->dimention);
             logistic_regression* logistic_regression_objs[2] = {new logistic_regression(option_), new logistic_regression(option_)};
 
             //Step 1, Create Multiverso ParameterLoader and Trainers, 
@@ -88,7 +88,7 @@ namespace multiverso
             //Create tables, the order of creating tables should arise from 0 continuously
             //The elements of talbes will be initialized with 0
             CreateMultiversoParameterTable(kWeightTableId,
-                option_->class_num, option_->dim,
+                option_->class_num, option_->dimention,
                 multiverso::Type::Double, multiverso::Format::Sparse);
 
             multiverso::Multiverso::EndConfig();
@@ -127,11 +127,11 @@ namespace multiverso
             std::queue<DataBlock*> datablock_queue;
             int data_block_count = 0;
 
-            char file_x[200];
-            sprintf(file_x, "%s_%d", option_->s_train_x_fn.c_str(), process_id_); 
-            int64 file_size = GetFileSize(file_x);
-            multiverso::Log::Info("train-file-size:%lld, data_block_size:%lld\n",
-                file_size, option_->data_block_size);
+            //char file_x[200];
+            //sprintf(file_x, "%s_%d", option_->s_train_x_fn.c_str(), process_id_); 
+            //int64 file_size = GetFileSize(file_x);
+            //multiverso::Log::Info("train-file-size:%lld, data_block_size:%lld\n",
+            //    file_size, option_->data_block_size);
             start_ = clock();
             multiverso::Multiverso::BeginTrain();
             DataBlock *data_block = new (std::nothrow)DataBlock();
@@ -162,7 +162,7 @@ namespace multiverso
               
         void Distributed_svrg::LoadData(DataBlock *data_block, Reader *reader, int64 size)
         {
-            reader->ResetSize(size);
+            //reader->ResetSize(size);
             sp_mat trn_x, tst_x;
             vec trn_y, tst_y;
             reader->GetSamples(trn_x, tst_x, trn_y, tst_y);

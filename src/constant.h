@@ -11,7 +11,7 @@
 
 namespace multiverso
 {
-    namespace svrg
+    namespace hybrid_logistic_regression
     {
         /*! \brief Table id is use*/
         const multiverso::integer_t kWeightTableId = 0;

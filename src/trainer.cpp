@@ -48,7 +48,6 @@ namespace multiverso
 		
             //Step 2, After finishing copying parameter,
             //Use lr_ptr_ to train a part of data_block
-            clock_t start = clock();
             multiverso::Log::Debug("Rank %d Train %d TrainNN Begin TrainIteration%d ...\n",
                 process_id_, trainer_id_, train_count_);
             lr_ptr_->train_test(trainer_id_);
@@ -81,7 +80,7 @@ namespace multiverso
             multiverso::Table *table = GetTable(kWeightTableId);
             for(int i=0;i < option_->class_num;i++)
             {
-                Row<real>* row = static_cast<Row<real>*>(table->GetRow(0));
+                Row<double>* row = static_cast<Row<double>*>(table->GetRow(0));
                 for (int j = 0; j < option_->dimention; ++j)
                     blocks[i][j] = row->At(j);
             }
@@ -92,7 +91,7 @@ namespace multiverso
         //Add delta to local buffer and send it to the parameter sever
         void Trainer::AddDeltaParameter()
         {
-            std::vector<real*> blocks_get;
+            std::vector<double*> blocks_get;
             size_t total_blocks = 1;
             //Request blocks_get to store parameters
             memory_mamanger_->RequestBlocks(total_blocks, blocks_get);
@@ -106,13 +105,13 @@ namespace multiverso
 
             lr_ptr_->getParameters(blocks_get);
             for (int i = 0; i <option_->class_num; ++i) {
-                //multiverso::Row<real>& row = GetRow<real>(kWeightTableId, i);
+                //multiverso::Row<double>& row = GetRow<double>(kWeightTableId, i);
                 for (int j = 0; j < option_->dimention; ++j) {
-                    real delta = (blocks_get[i][j] - blocks[i][j]) / process_count_;
+                    double delta = (blocks_get[i][j] - blocks[i][j]) / process_count_;
                     //optimization of update
                     //delta=delta*0.5;
 		            if (fabs(delta) > kEps)
-                        Add<real>(kWeightTableId, i, j, delta);
+                        Add<double>(kWeightTableId, i, j, delta);
                 }
             }
 

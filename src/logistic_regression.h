@@ -1,12 +1,17 @@
+#ifndef _LOGISTIC_REGRESSION_H_
+#define _LOGISTIC_REGRESSION_H_
+
 #include <iostream>
 #include <random>
+//#include <vector>
 #include <armadillo>
 #include "data_block.h"
 #include "util.h"
-using namespace arma;
+//#include "constant.h"
+
 using namespace multiverso;
 using namespace hybrid_logistic_regression;
-using namespace std;
+using namespace arma;
 
 class logistic_regression
 {
@@ -22,7 +27,7 @@ class logistic_regression
     vec parameter;
     vec momentum;
     double GAMMA;
-
+    Option *option_;
     public:
     //initialize the logistic regression parameter settings
     logistic_regression();
@@ -42,7 +47,7 @@ class logistic_regression
     void train();
 
     //produce the samples by a certain probability distribution
-    vec produceSamples(default_random_engine random);
+    vec produceSamples(std::default_random_engine random);
 
     //set the epoch size. Defaultly, it is set by the variable: EPOCH_SIZE
     void setEpochSize(int size);
@@ -76,9 +81,11 @@ class logistic_regression
     void train_test(int trainer_id);
 
     //set the parameters when pulling the parameters from multiverso
-    void logistic_regression::setParameters(std::vector<real*> &blocks);
+    void setParameters(std::vector<double*> &blocks);
 
     //get the parameters 
-    void logistic_regression::getParameters(std::vector<real*> &blocks);
+    void getParameters(std::vector<double*> &blocks);
     
 };
+
+#endif

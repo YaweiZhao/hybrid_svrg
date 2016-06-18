@@ -17,7 +17,7 @@
 
 #include "logistic_regression.h"
 
-//class AzsSvrg;
+class logistic_regression;
 
 namespace multiverso
 {
@@ -48,7 +48,7 @@ namespace multiverso
             clock_t start_, now_;
             FILE* log_file_;
 
-            std::vector<real*> blocks;//store the parameters from multiverso
+            std::vector<double*> blocks;//store the parameters from multiverso
 
             /*!
             * \brief Copy the needed parameter from buffer to blocks

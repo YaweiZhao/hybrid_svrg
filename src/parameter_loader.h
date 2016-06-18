@@ -9,10 +9,10 @@
 #include "data_block.h"
 #include "constant.h"
 #include "util.h"
-#include "logistic_regression.hpp"
+#include "logistic_regression.h"
 #include "log.h"
 
-//class AzsSvrg;
+class logistic_regression;
 namespace multiverso
 {
     namespace hybrid_logistic_regression
@@ -24,7 +24,7 @@ namespace multiverso
         {
         public:
             ParameterLoader(){}
-            ParameterLoader(Option *option, logistic_regression *lr_obj);
+            ParameterLoader(Option *option, logistic_regression *lr_ptr);
             /*!
             * \brief Parse the datablock to get the parameter needed
             * \param data_block which is pushed in
@@ -33,7 +33,7 @@ namespace multiverso
 
         public:
             Option *option_;
-            logistic_regression *lr_obj_;
+            logistic_regression *lr_ptr_;
             int parse_and_request_count_;
             clock_t start_;
             FILE* log_file_;

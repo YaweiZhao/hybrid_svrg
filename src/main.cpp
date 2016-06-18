@@ -18,7 +18,7 @@
 #include "parameter_loader.h"
 #include "trainer.h"
 #include "memory_manager.h"
-#include "logistic_regression.hpp"
+#include "logistic_regression.h"
 
 using namespace multiverso;
 using namespace hybrid_logistic_regression;

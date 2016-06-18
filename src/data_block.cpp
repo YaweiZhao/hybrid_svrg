@@ -1,5 +1,7 @@
 #include "data_block.h"
-#include "armadillo"
+#include <armadillo>
+using namespace arma;
+
 namespace multiverso
 {
     namespace hybrid_logistic_regression

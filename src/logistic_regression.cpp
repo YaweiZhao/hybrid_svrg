@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#include "armadillo"
+#include <armadillo>
 #include "logistic_regression.h"
 
 
@@ -87,7 +87,7 @@ void logistic_regression::train()
 }
 
 //produce the samples by a certain probability distribution
-vec logistic_regression::produceSamples(default_random_engine random)
+vec logistic_regression::produceSamples(std::default_random_engine random)
 {
     int n_instances = EPOCH_SIZE*MAX_NUM_ITERATION;
     vec samples = zeros<vec>(n_instances);
@@ -182,7 +182,7 @@ double logistic_regression::computeLoss(vec& parameter, sp_mat& x, vec& y)
 void logistic_regression::init(DataBlock* data_block)
 {
     sp_mat temp_trn_x;
-    sp_mat temp_tst_y;
+    sp_mat temp_tst_x;
     vec temp_trn_y;
     vec temp_tst_y;
     
@@ -209,7 +209,7 @@ void logistic_regression::train_test(int trainer_id)
 }
 
 //set the parameters when pulling the parameters from multiverso
-void logistic_regression::setParameters(std::vector<real*> &blocks)
+void logistic_regression::setParameters(std::vector<double*> &blocks)
 {
     //NOTICE: since logistic regression conducts the binary classification, the number of class is 2. (Here, class_num=1 means the number of class is 2.)
     for(int i=0;i<option_->class_num;i++)
@@ -222,7 +222,7 @@ void logistic_regression::setParameters(std::vector<real*> &blocks)
 }
 
 //get the parameters
-void logistic_regression::getParameters(std::vector<real*> &blocks)
+void logistic_regression::getParameters(std::vector<double*> &blocks)
 {
     for(int i=0;i < option_->class_num; i++)
     {
