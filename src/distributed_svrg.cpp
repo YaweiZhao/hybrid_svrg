@@ -10,6 +10,7 @@ namespace multiverso
             option_ = new (std::nothrow)Option();
             assert(option_ != nullptr);
             option_->parseArgs(argv[1]);
+            option_->printParam();
             reader_ = new (std::nothrow)Reader(option_);
             this->Train(argc, argv);
 

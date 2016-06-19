@@ -62,7 +62,14 @@ namespace multiverso
                 std::stringstream item(buffer);
                 item>>param_name;
                 item>>param_value;
-                
+                if(param_name=="fn_trn_x")
+                        fn_trn_x = param_value;
+                if(param_name=="fn_tst_x")
+                        fn_tst_x = param_value;
+                if(param_name == "fn_trn_y")
+                        fn_trn_y = param_value;
+                if(param_name == "fn_tst_y")
+                        fn_tst_y = param_value;
                 if(param_name=="do_sparse") 
 			do_sparse = true;
                 if(param_name=="is_pipeline")
@@ -102,7 +109,15 @@ namespace multiverso
             }
 
         }
-
+        void Option::printParam() const
+        {
+            cout<<"............................................\n";            cout<<"do_sparse: "<<do_sparse<<endl;
+            cout<<"fn_trn_x: "<<fn_trn_x<<endl;
+            cout<<"fn_tst_x: "<<fn_tst_x<<endl;
+            cout<<"fn_trn_y: "<<fn_trn_y<<endl;
+            cout<<"fn_tst_y: "<<fn_tst_y<<endl;
+	    cout<<"............................................\n";
+        }
         std::string GetSystemTime()
         {
             time_t t = time(0);

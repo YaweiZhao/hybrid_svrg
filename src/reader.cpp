@@ -14,6 +14,9 @@ namespace multiverso
             //const char* fn_tst_x(option_->fn_tst_x);
             //const char* fn_trn_y(option_->fn_trn_y);
             //const char* fn_tst_y(option_->fn_tst_y);
+            multiverso::Log::Debug("training text:%s\n",option_->fn_trn_x.c_str());
+            multiverso::Log::Debug("test text:%s\n",option_->fn_tst_x.c_str());
+
             trn_x.load(option_->fn_trn_x,arma::coord_ascii);
             trn_x.row(option_->dimention-1).fill(1);
             tst_x.load(option_->fn_tst_x,arma::coord_ascii);

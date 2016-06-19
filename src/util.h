@@ -8,8 +8,7 @@
 #include <cstring>
 #include <cstdlib>
 #include "constant.h"
-
-//#include "AzsSvrg.hpp"
+using namespace std;
 
 namespace multiverso
 {
@@ -19,10 +18,10 @@ namespace multiverso
         {
             /*---  parameters  ---*/
             bool do_dense, do_sparse; 
-            char* fn_trn_x;
-            char* fn_tst_x;
-            char* fn_trn_y;
-            char*  fn_tst_y;
+            string fn_trn_x;
+            string fn_tst_x;
+            string fn_trn_y;
+            string  fn_tst_y;
 
             bool is_pipeline;
             int thread_cnt;
