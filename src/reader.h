@@ -16,7 +16,7 @@ namespace multiverso
             Reader(Option *option): option_(option) {}
             ~Reader(){}
             
-            void GetSamples(sp_mat trn_x, sp_mat tst_x, vec trn_y, vec tst_y);
+            void GetSamples(sp_mat& trn_x, sp_mat& tst_x, vec& trn_y, vec& tst_y);
 
         public:
             const Option *option_;

@@ -1,0 +1,27 @@
+[INFO] [2016-06-21 18:57:56] Rank 0/1: Begin of configuration and initialization.
+[INFO] [2016-06-21 18:57:56] Rank 0/1: End of configration and initialization.
+[INFO] [2016-06-21 18:57:56] Rank 0/1: Begin of training.
+[DEBUG] [2016-06-21 18:57:56] training text:/vol6/home/kd_yjp/datasets/datasets/test/data.txt
+[DEBUG] [2016-06-21 18:57:56] test text:/vol6/home/kd_yjp/datasets/datasets/test/x.txt
+[DEBUG] [2016-06-21 19:06:07] >>>>>>the training data has been loaded to the temp matrix!
+[DEBUG] [2016-06-21 19:06:07] >>>>>>the test data has been loaded to the temp matrix!
+[DEBUG] [2016-06-21 19:06:07] >>>>>>the data has been loaded to the temp matrix!
+[INFO] [2016-06-21 19:06:07] LoadOneDataBlockTime:1471.750000s
+[INFO] [2016-06-21 19:06:07] Rank 0 Pushed 1 datablocks
+[INFO] [2016-06-21 19:06:07] Rank 0 ParameterLoader begin 0
+[INFO] [2016-06-21 19:06:07] Rank 0 Train 0 Begin TrainIteration0 ...
+[DEBUG] [2016-06-21 19:06:07] Rank 0 Train 0 Copyparameter Begin TrainIteration1 ...
+[DEBUG] [2016-06-21 19:06:07] Rank 0 Train 0 Copyparameter end TrainIteration1 ...
+[DEBUG] [2016-06-21 19:06:07] Rank 0 Train 0 TrainNN Begin TrainIteration1 ...
+[INFO] [2016-06-21 19:06:07] Process: 0 and thread: 0 begins!
+[INFO] [2016-06-21 19:06:08] The loss now is: 0.692627
+[INFO] [2016-06-21 19:06:08] The loss now is: 0.691589
+[INFO] [2016-06-21 19:06:08] The loss now is: 0.690043
+[INFO] [2016-06-21 19:06:08] The loss now is: 0.687999
+[INFO] [2016-06-21 19:06:09] The loss now is: 0.685470
+[DEBUG] [2016-06-21 19:06:09] Rank 0 Train 0 AddDeltaParameter Begin TrainIteration1 ...
+[INFO] [2016-06-21 19:06:09] Rank 0/1: End of training.
+[INFO] [2016-06-21 19:06:09] Server 0: Received close message from worker 0.
+[INFO] [2016-06-21 19:06:09] Server 0: Dump model...
+[INFO] [2016-06-21 19:06:09] Server 0 closed.
+[INFO] [2016-06-21 19:06:10] Rank 0/1: Multiverso closed successfully.

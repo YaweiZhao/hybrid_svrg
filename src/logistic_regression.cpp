@@ -2,8 +2,9 @@
 #include <random>
 #include <cmath>
 #include <armadillo>
+#include <sstream>
 #include "logistic_regression.h"
-
+#include "file.h"
 
 using namespace std;
 using namespace arma;
@@ -39,6 +40,7 @@ logistic_regression::logistic_regression(Option* option_)
     parameter = zeros<vec>(DIMENTION);
     momentum = zeros<vec>(DIMENTION);
     GAMMA = option_->gamma;
+    this->option_ = option_;
 
 }
 
@@ -173,7 +175,13 @@ double logistic_regression::computeLoss(vec& parameter, sp_mat& x, vec& y)
         loss = loss + -1*log(1/(1+exp(-1*temp*y(i))));
     }
     loss = loss/DATA_SIZE;
-    cout<<"The loss now is: "<<loss<<endl;
+    stringstream s_loss;
+    s_loss<<loss;
+    string loss_str;
+    loss_str<<s_loss;
+    file f("lr_loss.txt");
+    f.write(loss_str,ios::app);
+    //multiverso::Log::Info("The loss now is: %f\n",loss);
     return loss;
 }
 

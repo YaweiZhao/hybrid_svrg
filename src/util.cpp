@@ -17,6 +17,7 @@ namespace multiverso
             is_pipeline = false;
             thread_cnt =1;
             epoch_size = 1;
+            data_size=0;
             data_block_size = 2000000000;
             max_preload_data_size = 2000000000;
 
@@ -97,25 +98,43 @@ namespace multiverso
                 if(param_name=="data_size") 
 			data_size = atoi(param_value.c_str());
                 if(param_name=="regularized") 
-			regularized = atoi(param_value.c_str());
+			regularized = atof(param_value.c_str());
                 if(param_name=="learning_rate") 
 			learning_rate = atof(param_value.c_str());
                 if(param_name=="gamma") 
 			gamma = atof(param_value.c_str());
                 if(param_name=="class_num") 
-			class_num = atof(param_value.c_str());
-                if(param_name=="max_num_iteration") 
-			max_num_iteration = atof(param_value.c_str());
+			class_num = atoi(param_value.c_str());
+                if(param_name=="max_num_iterations") 
+			max_num_iteration = atoi(param_value.c_str());
             }
 
         }
         void Option::printParam() const
         {
-            cout<<"............................................\n";            cout<<"do_sparse: "<<do_sparse<<endl;
+            cout<<"............................................\n";            
+	    cout<<"do_sparse: "<<do_sparse<<endl;
             cout<<"fn_trn_x: "<<fn_trn_x<<endl;
             cout<<"fn_tst_x: "<<fn_tst_x<<endl;
             cout<<"fn_trn_y: "<<fn_trn_y<<endl;
             cout<<"fn_tst_y: "<<fn_tst_y<<endl;
+            cout<<"is_pipeline: "<<is_pipeline<<endl;
+            cout<<"thread_cnt: "<<thread_cnt<<endl;
+            cout<<"num_servers: "<<num_servers<<endl;
+            cout<<"num_aggregator:"<<num_aggregator<<endl;
+            cout<<"lock_option:"<<lock_option<<endl;
+            cout<<"num_lock: "<<num_lock<<endl;
+            cout<<"max_delay: "<<max_delay<<endl;
+            cout<<"data_block_size: "<<data_block_size<<endl;
+            cout<<"max_preload_data_size: "<<max_preload_data_size<<endl;
+            cout<<"dimention: "<<dimention<<endl;
+            cout<<"epoch_size: "<<epoch_size<<endl;
+            cout<<"data_size: "<<data_size<<endl;
+            cout<<"regularized: "<<regularized<<endl;
+            cout<<"learning_rate: "<<learning_rate<<endl;
+            cout<<"gamma: "<<gamma<<endl;
+            cout<<"class_num: "<<class_num<<endl;
+            cout<<"max_num_iteration: "<<max_num_iteration<<endl;
 	    cout<<"............................................\n";
         }
         std::string GetSystemTime()

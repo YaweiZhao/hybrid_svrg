@@ -137,7 +137,7 @@ namespace multiverso
             multiverso::Multiverso::BeginTrain();
             DataBlock *data_block = new (std::nothrow)DataBlock();
             assert(data_block != nullptr);
-            for (int cur_epoch = 0; cur_epoch < option_->epoch_size; ++cur_epoch)
+            for (int cur_epoch = 0; cur_epoch < 1; ++cur_epoch)
             {
                 //reader_->ResetStart();
                 multiverso::Multiverso::BeginClock();
@@ -158,14 +158,20 @@ namespace multiverso
 
             //After EndTrain, all the datablock are done,
             //we remove all the datablocks
-            RemoveDoneDataBlock(datablock_queue);
+            //RemoveDoneDataBlock(datablock_queue);
         }
               
         void Distributed_svrg::LoadData(DataBlock *data_block, Reader *reader, int64 size)
         {
             //reader->ResetSize(size);
-            sp_mat trn_x, tst_x;
-            vec trn_y, tst_y;
+            sp_mat trn_x;
+            sp_mat tst_x;
+            vec trn_y;
+            vec tst_y;
+
+//cout<<"trn_x.n_rows:"<<trn_x.n_rows<<endl;
+//cout<<"trn_x.n_cols:"<<trn_x.n_cols<<endl;
+
             reader->GetSamples(trn_x, tst_x, trn_y, tst_y);
             data_block->AddSamples(trn_x, tst_x, trn_y, tst_y);
         }
