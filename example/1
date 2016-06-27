@@ -1,0 +1,41 @@
+fn_trn_x /vol6/home/kd_yjp/datasets/datasets/test/x.txt
+
+fn_trn_y /vol6/home/kd_yjp/datasets/datasets/test/y.txt
+
+fn_tst_x /vol6/home/kd_yjp/datasets/datasets/test/x.txt
+
+fn_tst_y /vol6/home/kd_yjp/datasets/datasets/test/y.txt
+
+do_sparse true
+
+thread_cnt 2
+max_num_iterations 20  
+is_pipeline true
+
+data_size 3
+
+epoch_size 3
+
+num_servers 0
+
+num_aggregator 1
+
+lock_option 2
+
+num_lock 100
+
+max_delay 10
+
+data_block_size 200000000
+
+max_preload_data_size 200000000
+
+dimention 124
+
+class_num 1
+
+learning_rate 0.001
+
+regularized 0.00001
+
+gamma 0.999 

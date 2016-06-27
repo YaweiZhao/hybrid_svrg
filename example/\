@@ -1,0 +1,28 @@
+#---  sample parameter file 
+#     Anything following "#" is considered to be a comment and ignored. 
+
+train_x_fn /vol6/home/kd_yjp/datasets/datasets/test/data
+train_target_fn /vol6/home/kd_yjp/datasets/datasets/test/label
+test_x_fn /vol6/home/kd_yjp/datasets/datasets/test/data
+test_target_fn /vol6/home/kd_yjp/datasets/datasets/test/label
+do_sparse true
+
+thread_cnt 2
+max_num_iterations 5  
+is_pipeline true
+
+epoch_size 100000000
+num_servers 0
+num_aggregator 1
+lock_option 2
+num_lock 100
+max_delay 10
+data_block_size 2000000000
+max_preload_data_size 2000000000
+dimention 200
+class_num 1
+
+learning_rate 0.000001
+lam 0.00001    
+regularized 0.00001
+gamma 0.999 

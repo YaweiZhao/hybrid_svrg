@@ -50,7 +50,7 @@ namespace multiverso
             //Use lr_ptr_ to train a part of data_block
             multiverso::Log::Debug("Rank %d Train %d TrainNN Begin TrainIteration%d ...\n",
                 process_id_, trainer_id_, train_count_);
-            lr_ptr_->train_test(trainer_id_);
+            lr_ptr_->train_test(trainer_id_, barrier_);
             //Wait for all the trainers to finish training
             barrier_->Wait();
             multiverso::Log::Debug("Rank %d Train %d AddDeltaParameter Begin TrainIteration%d ...\n",

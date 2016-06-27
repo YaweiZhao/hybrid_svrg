@@ -13,7 +13,9 @@ namespace multiverso
 	    public:
                 string fn;
             public:
-                bool write(string text,int mode);
+                file(string ff);
+                bool write(string text);
+
                 bool read();
                 
         };

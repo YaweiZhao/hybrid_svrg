@@ -90,7 +90,7 @@ namespace multiverso
             //The elements of talbes will be initialized with 0
             CreateMultiversoParameterTable(kWeightTableId,
                 option_->class_num, option_->dimention,
-                multiverso::Type::Double, multiverso::Format::Sparse);
+                multiverso::Type::Double, multiverso::Format::Dense);
 
             multiverso::Multiverso::EndConfig();
         }
@@ -137,7 +137,7 @@ namespace multiverso
             multiverso::Multiverso::BeginTrain();
             DataBlock *data_block = new (std::nothrow)DataBlock();
             assert(data_block != nullptr);
-            for (int cur_epoch = 0; cur_epoch < 1; ++cur_epoch)
+            for (int cur_epoch = 0; cur_epoch < option_->multiverso_epoch; ++cur_epoch)
             {
                 //reader_->ResetStart();
                 multiverso::Multiverso::BeginClock();

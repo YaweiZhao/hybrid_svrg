@@ -25,6 +25,7 @@ namespace multiverso
 
             bool is_pipeline;
             int thread_cnt;
+            int multiverso_epoch;
             int epoch_size; 
             int num_servers;
             int num_aggregator;

@@ -5,9 +5,10 @@
 #include <sstream>
 #include "logistic_regression.h"
 #include "file.h"
-
+//#include "barrier.h"
 using namespace std;
 using namespace arma;
+using namespace multiverso;
 
 //initialize the logistic regression parameter settings
 logistic_regression::logistic_regression(){}
@@ -26,6 +27,8 @@ logistic_regression::logistic_regression(int data_size,
 	EPOCH_SIZE = epoch_size;
     DIMENTION = dimention;
     parameter = zeros<vec>(DIMENTION);
+    full_gradient = zeros<vec>(DIMENTION);
+    local_parameter = zeros<vec>(DIMENTION);
     momentum = zeros<vec>(DIMENTION);
     GAMMA = gamma;
 }
@@ -37,7 +40,10 @@ logistic_regression::logistic_regression(Option* option_)
 	MAX_NUM_ITERATION = option_->max_num_iteration;
 	EPOCH_SIZE = option_->epoch_size;
     DIMENTION = option_->dimention;
+    sample_epoch = zeros<vec>(EPOCH_SIZE*MAX_NUM_ITERATION);
     parameter = zeros<vec>(DIMENTION);
+    full_gradient = zeros<vec>(DIMENTION);
+    local_parameter = zeros<vec>(DIMENTION);
     momentum = zeros<vec>(DIMENTION);
     GAMMA = option_->gamma;
     this->option_ = option_;
@@ -56,36 +62,50 @@ void logistic_regression::end(time_t& end)
     time(&end);
 }
 //training the parameters. The fl2-regularization is added
-void logistic_regression::train()
+void logistic_regression::train(int trainer_id, multiverso::Barrier *barrier)
 {
     //produce the samples by a certain probability distribution
     default_random_engine random(time(NULL));    
-    vec sample_epoch = produceSamples(random);
-
-    for(int i=0;i<MAX_NUM_ITERATION;i++)
+    if(trainer_id==0) 
     {
         //set the epoch size. Defaultly, it is set by the variable: EPOCH_SIZE
         setEpochSize(EPOCH_SIZE);
-        //compute the full gradient
-        vec full_gradient = computeFullGradient(parameter);
-        vec local_parameter = parameter;
-        for(int j=0;j<EPOCH_SIZE;j++)
+        sample_epoch = produceSamples(random);
+    }
+    barrier->Wait();
+    for(int i=0;i<MAX_NUM_ITERATION;i++)
+    {
+multiverso::Log::Info(">>>>>>>>>>>>>>>>learning thread %dth!\n",trainer_id);
+        //compute the full gradient in parallel way
+        vec full_gradient_thread = computeFullGradient(parameter,trainer_id, option_->thread_cnt);
+        //sum all the full gradient in serial way
+        mutex_.lock();
+        full_gradient = full_gradient+full_gradient_thread;
+        mutex_.unlock();
+        local_parameter = parameter;
+        barrier->Wait();
+        for(int j=trainer_id;j<EPOCH_SIZE;j+=option_->thread_cnt)
         {
             //compute the reduced variance
-            vec vr = computeReducedVariance(parameter, local_parameter, full_gradient, sample_epoch[i*EPOCH_SIZE+j]);
+            vec vr = computeReducedVariance(parameter, local_parameter, full_gradient, sample_epoch(i*EPOCH_SIZE+j));
             //update the parameters
+            //add the write lock
+            mutex_.lock();
             updateParameters(local_parameter, vr, LEARNING_RATE);
+            mutex_.unlock();
         }
-
-        //Identify the parameters for the next iteration
-        identifyParameters(local_parameter, parameter);
-
-        //evaluate the loss
-        if(i%5==0)
+        barrier->Wait();
+        if(trainer_id == 0)
         {
-            computeLoss(parameter, training_x, training_y);
-        }
-    } 
+           //Identify the parameters for the next iteration
+           identifyParameters(local_parameter, parameter); 
+           //evaluate the loss
+           if(i%1==0){
+               computeLoss(parameter, training_x, training_y);
+	       //parameter.load("parameter.txt");
+ 	    }
+        }//end if
+    }//end for 
 }
 
 //produce the samples by a certain probability distribution
@@ -119,22 +139,21 @@ vec logistic_regression::computeStochasticGradient(vec& parameters, int index)
     double w_x = as_scalar(parameters.t()*training_x.col(index));
     double y = training_y[index];
     double temp0 = (1/(1+std::exp(y*w_x)))*(-1*y);
-    vec gradient(temp0*training_x.col(index));
+    vec gradient(temp0*training_x.col(index)+2*REGULARIZED*parameters);
     return gradient;
 }
 
-//compute the full gradient
-vec logistic_regression::computeFullGradient(vec& global_parameter)
+//compute the full gradient via multiple threads
+vec logistic_regression::computeFullGradient(vec& global_parameter,int trainer_id, int thread_cnt)
 {
     vec full_gradient = zeros<vec>(DIMENTION);
-    for(int i=0;i<DATA_SIZE;i++)//consider the constant
+    for(int i=trainer_id;i<DATA_SIZE;i+=thread_cnt)//consider the constant
     {
         vec temp0 = computeStochasticGradient(global_parameter, i);
         full_gradient += temp0;
     }
     //add the regularized norm's gradient
     vec temp_regularized = computeRegularizedGradient(global_parameter);
-    full_gradient += temp_regularized;
     full_gradient = full_gradient/DATA_SIZE;
 
     return full_gradient;
@@ -172,15 +191,14 @@ double logistic_regression::computeLoss(vec& parameter, sp_mat& x, vec& y)
     for(int i=0;i<DATA_SIZE;i++)
     {
         double temp = as_scalar(parameter.t()*x.col(i));
-        loss = loss + -1*log(1/(1+exp(-1*temp*y(i))));
+        loss = loss - log(1/(1+exp(-1*temp*y(i))));
     }
-    loss = loss/DATA_SIZE;
-    stringstream s_loss;
-    s_loss<<loss;
-    string loss_str;
-    loss_str<<s_loss;
+    loss = loss/DATA_SIZE+REGULARIZED*(as_scalar(parameter.t()*parameter));
+    ostringstream s_loss;
+    s_loss<<loss<<"\n";
+    string loss_str = s_loss.str();
     file f("lr_loss.txt");
-    f.write(loss_str,ios::app);
+    f.write(loss_str);
     //multiverso::Log::Info("The loss now is: %f\n",loss);
     return loss;
 }
@@ -200,7 +218,7 @@ void logistic_regression::init(DataBlock* data_block)
 }
 
 //the entrance from the multiverso to the training thread, and the training process is finally started.
-void logistic_regression::train_test(int trainer_id)
+void logistic_regression::train_test(int trainer_id, multiverso::Barrier *barrier)
 {
     int fast, slow, self;
     double wait_time=0;
@@ -212,7 +230,7 @@ void logistic_regression::train_test(int trainer_id)
     time_t begin_time=0;
     time_t end_time=0;
     begin(begin_time);
-    train();
+    train(trainer_id,barrier);
     end(end_time);
 }
 

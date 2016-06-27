@@ -16,6 +16,7 @@ namespace multiverso
 
             is_pipeline = false;
             thread_cnt =1;
+	    multiverso_epoch=1;
             epoch_size = 1;
             data_size=0;
             data_block_size = 2000000000;
@@ -95,6 +96,8 @@ namespace multiverso
 			dimention = atoi(param_value.c_str());
                 if(param_name=="epoch_size") 
 			epoch_size = atoi(param_value.c_str());
+                if(param_name=="multiverso_epoch")
+			multiverso_epoch=atoi(param_value.c_str());
                 if(param_name=="data_size") 
 			data_size = atoi(param_value.c_str());
                 if(param_name=="regularized") 

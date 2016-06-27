@@ -7,7 +7,7 @@
 #include <armadillo>
 #include "data_block.h"
 #include "util.h"
-//#include "constant.h"
+#include "barrier.h"
 
 using namespace multiverso;
 using namespace hybrid_logistic_regression;
@@ -26,8 +26,12 @@ class logistic_regression
     vec training_y;
     vec parameter;
     vec momentum;
+    vec full_gradient;//used for parallel computation of the full gradient
+    vec local_parameter;//parameter update by using lock free method
+    vec sample_epoch;
     double GAMMA;
     Option *option_;
+    std::mutex mutex_;
     public:
     //initialize the logistic regression parameter settings
     logistic_regression();
@@ -44,7 +48,7 @@ class logistic_regression
     //record the end time of the training process
     void end(time_t& end);
     //training the parameters. The fl2-regularization is added
-    void train();
+    void train(int trainer_id, multiverso::Barrier *barrier);
 
     //produce the samples by a certain probability distribution
     vec produceSamples(std::default_random_engine random);
@@ -56,7 +60,7 @@ class logistic_regression
     vec computeStochasticGradient(vec& local_parameter, int index);
 
     //compute the full gradient; while the constant part is not included.
-    vec computeFullGradient(vec& global_parameter);
+    vec computeFullGradient(vec& global_parameter, int trainer_id, int thread_cnt);
 
     //compute the regularized norm's gradient
     vec computeRegularizedGradient(vec& global_parameter);
@@ -78,7 +82,7 @@ class logistic_regression
     void init(DataBlock* data_block);
 
     //the entrance from the multiverso to the training thread, and the training process is finally started.
-    void train_test(int trainer_id);
+    void train_test(int trainer_id,multiverso::Barrier* barrier);
 
     //set the parameters when pulling the parameters from multiverso
     void setParameters(std::vector<double*> &blocks);

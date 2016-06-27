@@ -8,11 +8,15 @@ namespace multiverso
 {
     namespace hybrid_logistic_regression
     {
-        bool file::write(string text,int mode)
+        file::file(string fn)
+	{
+	    this->fn = fn;
+	}
+        bool file::write(string text)
 	{
 	    bool success=false;
             ofstream outfile;
-            outfile.open(fn.c_str(),mode);
+            outfile.open(fn.c_str(),ios::app);
             if(outfile.is_open())
 	    {
 		outfile<<text;
