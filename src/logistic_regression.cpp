@@ -103,7 +103,7 @@ multiverso::Log::Info(">>>>>>>>>>>>>>>>learning thread %dth!\n",trainer_id);
            if(i%1==0){
                computeLoss(parameter, training_x, training_y);
 	       //parameter.load("parameter.txt");
- 	    }
+ 	       }
         }//end if
     }//end for 
 }
@@ -127,12 +127,6 @@ void logistic_regression::setEpochSize(int size)
     EPOCH_SIZE = size;
 }
 
-//compute the regularized norm's gradient
-vec logistic_regression::computeRegularizedGradient(vec& parameter)
-{
-    vec regularized_gradient = 2*REGULARIZED*parameter;
-    return regularized_gradient;
-}
 //compute the stochastic local gradient
 vec logistic_regression::computeStochasticGradient(vec& parameters, int index)
 {
@@ -146,17 +140,15 @@ vec logistic_regression::computeStochasticGradient(vec& parameters, int index)
 //compute the full gradient via multiple threads
 vec logistic_regression::computeFullGradient(vec& global_parameter,int trainer_id, int thread_cnt)
 {
-    vec full_gradient = zeros<vec>(DIMENTION);
+    vec full_gradient_local = zeros<vec>(DIMENTION);
     for(int i=trainer_id;i<DATA_SIZE;i+=thread_cnt)//consider the constant
     {
         vec temp0 = computeStochasticGradient(global_parameter, i);
-        full_gradient += temp0;
+        full_gradient_local = full_gradient_local + temp0;
     }
-    //add the regularized norm's gradient
-    vec temp_regularized = computeRegularizedGradient(global_parameter);
-    full_gradient = full_gradient/DATA_SIZE;
+    full_gradient_local = full_gradient_local/DATA_SIZE;
 
-    return full_gradient;
+    return full_gradient_local;
 }
 
 //compute the reduced variance
